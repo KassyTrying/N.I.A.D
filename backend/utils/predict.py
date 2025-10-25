@@ -1,12 +1,16 @@
 import joblib
 import numpy as np
 import pandas as pd
+import os
 
-def load_models(features_path="X_scaled.pkl",
-               labels_path="y.pkl",
-               scaler_path="scaler.pkl",
-               encoders_path="categorical_encoders.pkl",
-               model_path="model.pkl"):
+# Get the absolute path to the backend directory
+BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def load_models(features_path=os.path.join(BACKEND_DIR, "model", "X_scaled.pkl"),
+               labels_path=os.path.join(BACKEND_DIR, "model", "y.pkl"),
+               scaler_path=os.path.join(BACKEND_DIR, "model", "scaler.pkl"),
+               encoders_path=os.path.join(BACKEND_DIR, "model", "categorical_encoders.pkl"),
+               model_path=os.path.join(BACKEND_DIR, "model", "random_forest.pkl")):
     """
     Load all necessary models and preprocessors
     """

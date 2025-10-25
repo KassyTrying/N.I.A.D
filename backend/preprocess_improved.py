@@ -4,11 +4,14 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 import joblib
 import os
 
-def preprocess_data(input_file=os.path.join("backend", "data", "KDDTrain+.txt"),
-                    output_features=os.path.join("model", "X_scaled.pkl"),
-                    output_labels=os.path.join("model", "y.pkl"),
-                    output_scaler=os.path.join("model", "scaler.pkl"),
-                    output_encoders=os.path.join("model", "categorical_encoders.pkl")):
+# Get the absolute path to the backend directory
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def preprocess_data(input_file=os.path.join(BACKEND_DIR, "data", "KDDTrain+.txt"),
+                    output_features=os.path.join(BACKEND_DIR, "model", "X_scaled.pkl"),
+                    output_labels=os.path.join(BACKEND_DIR, "model", "y.pkl"),
+                    output_scaler=os.path.join(BACKEND_DIR, "model", "scaler.pkl"),
+                    output_encoders=os.path.join(BACKEND_DIR, "model", "categorical_encoders.pkl")):
     """
     Preprocess the NSL-KDD dataset:
     1. Encodes categorical features (protocol_type, service, flag)
