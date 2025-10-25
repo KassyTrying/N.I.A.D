@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>N.I.A.D - Live Monitoring</title>
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/star.css">
+    <link rel="stylesheet" href="css/stars.css">
 </head>
 <body>
     <div class="stars"></div>
@@ -18,12 +18,91 @@
             </div>
         </section>
         
-        <section class="live-monitor" aria-label="NetWork Live Monitoring">
-             <!-- Network Status -->
+                <section class="live-monitor" aria-label="NetWork Live Monitoring">
+            <!-- Network Status -->
             <div class="network-status">
-                <h2>Network Status</h2>
-                <p>Status: <span id="status">Connected</span></p>
-                <p>Active Connections: <span id="active-connections">128</span></p>
-                <p>Data Throughput: <span id="data-throughput">500 Mbps</span></p>
-               
+                <h3>Current Network Connection</h3>
+                <div class="status-card">
+                    <div class="status-item">
+                        <span class="label">Network:</span>
+                        <span class="value" id="network-name">HomeNetwork_5G</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">IP Address:</span>
+                        <span class="value" id="ip-address">192.168.1.45</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">Status:</span>
+                        <span class="value status-badge" id="connection-status">
+                            <span class="status-dot active"></span>Connected
+                        </span>
+                    </div>
+                </div>
             </div>
+
+            <!-- Scan Controls -->
+            <div class="scan-controls">
+                <button id="scan-btn" class="btn btn-primary scan-button">
+                    <span class="btn-icon">🔍</span>
+                    Start Network Scan
+                </button>
+                <p class="small scan-hint">Scans for anomalies and intrusions on your network</p>
+            </div>
+
+            <!-- Scanning Status -->
+            <div id="scanning-status" class="scanning-status" hidden>
+                <h3>Scanning Network...</h3>
+                <div class="progress">
+                    <div class="bar" id="scan-progress" style="width:0%"></div>
+                </div>
+                <p class="status-text small" id="scan-status-text">Initializing scan...</p>
+            </div>
+
+            <!-- Scan Report -->
+            <div id="scan-report" class="scan-report" hidden>
+                <h3>Scan Report</h3>
+                <div class="report-header">
+                    <div class="report-summary" id="report-summary">
+                        <span class="summary-icon">✅</span>
+                        <span class="summary-text">No threats detected</span>
+                    </div>
+                    <div class="report-time small">
+                        Completed: <span id="scan-time">--:--:--</span>
+                    </div>
+                </div>
+        
+                <div class="report-details">
+                    <div class="detail-section">
+                        <h4>Anomaly Detection</h4>
+                        <ul class="detail-list" id="anomaly-list">
+                            <li>✓ Traffic patterns: Normal</li>
+                            <li>✓ Bandwidth usage: Within expected range</li>
+                            <li>✓ Connection behavior: No anomalies detected</li>
+                        </ul>
+                    </div>
+          
+                    <div class="detail-section">
+                        <h4>Intrusion Detection</h4>
+                        <ul class="detail-list" id="intrusion-list">
+                            <li>✓ Port scans: None detected</li>
+                            <li>✓ Unauthorized access attempts: 0</li>
+                            <li>✓ Malicious signatures: None found</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4>Network Statistics</h4>
+                        <ul class="detail-list">
+                            <li>Devices scanned: <strong id="devices-count">12</strong></li>
+                            <li>Packets analyzed: <strong id="packets-count">45,392</strong></li>
+                            <li>Scan duration: <strong id="scan-duration">8.3s</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="js/stars.js"></script>
+    <script src="js/live-monitor.js"></script>
+</body>
+</html>
