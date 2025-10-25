@@ -11,7 +11,7 @@ def test_preprocessing():
     print("\n=== Testing Preprocessing ===")
     try:
         # Load raw data
-        input_file = os.path.join("data", "KDDTrain+.txt")
+        input_file=os.path.join( "data", "KDDTrain+.txt")
         if not os.path.exists(input_file):
             print(f"[ERROR] Input file not found: {input_file}")
             return False
