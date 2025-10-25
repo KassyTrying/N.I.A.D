@@ -1,0 +1,7 @@
+/* Chat Bot layout styles for anomaly detection */
+.chat-bot{
+    display: flex;
+    flex-direction: column;
+    max-width: 540px;
+    
+}
