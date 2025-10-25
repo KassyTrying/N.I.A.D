@@ -30,10 +30,13 @@ def predict_route():
 @app.route('/model-info', methods=['GET'])
 def model_info():
     try:
+        # Get the absolute path to the backend directory
+        BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+        
         # Check if model file exists
-        model_exists = os.path.exists("model.pkl")
-        scaler_exists = os.path.exists("scaler.pkl")
-        encoders_exist = os.path.exists("categorical_encoders.pkl")
+        model_exists = os.path.exists(os.path.join(BACKEND_DIR, "model", "isolation_forest.pkl"))
+        scaler_exists = os.path.exists(os.path.join(BACKEND_DIR, "model", "scaler.pkl"))
+        encoders_exist = os.path.exists(os.path.join(BACKEND_DIR, "model", "categorical_encoders.pkl"))
         
         return jsonify({
             "model_loaded": model_exists,
