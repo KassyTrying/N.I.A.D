@@ -1,5 +1,47 @@
 <!doctype html>
 <html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>N.I.A.D - Intrusion</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/stars.css">
+  <style>
+    .panel { padding: 1rem; }
+    .controls { display:flex; gap:0.5rem; align-items:center; }
+    #result { margin-top:1rem; white-space:pre-wrap; background:rgba(0,0,0,0.05); padding:1rem; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <main class="card">
+    <section class="hero">
+      <h1>Intrusion Detection</h1>
+      <p class="lead">Quick interface to inspect available datasets and run backend analysis.</p>
+      <div class="panel">
+        <div class="controls">
+          <label for="file-select">Choose dataset:</label>
+          <select id="file-select"><option value="">(loading...)</option></select>
+          <button id="analyze-btn" class="btn btn-primary">Analyze file</button>
+          <button id="refresh-btn" class="btn">Refresh files</button>
+        </div>
+        <div style="margin-top:.5rem">
+          <button id="model-info-btn" class="btn">Model Info</button>
+        </div>
+        <div id="result" aria-live="polite">No results yet.</div>
+      </div>
+      <div class="action" style="margin-top:1rem">
+        <a class="htn btn-primary" href="index.html">Home</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/stars.js"></script>
+  <script src="js/intrusion.js"></script>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
