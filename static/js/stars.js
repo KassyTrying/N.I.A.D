@@ -114,4 +114,3 @@ window.stars = {
 
 // Backwards-compatible global reference (some pages call createStars directly)
 window.createStars = createStars;
-
