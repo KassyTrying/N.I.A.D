@@ -87,3 +87,58 @@ def predict(data):
         
     except Exception as e:
         raise Exception(f"Prediction error: {str(e)}")
+
+
+def predict_file(features_path=os.path.join(BACKEND_DIR, "model", "X_scaled.pkl"),
+                 model_path=os.path.join(BACKEND_DIR, "model", "random_forest.pkl")):
+    """
+    Run predictions on a saved, preprocessed features file (joblib dump).
+
+    Returns a summary dict containing predictions and basic statistics.
+    """
+    try:
+        # Load preprocessed features
+        X = joblib.load(features_path)
+
+        # Ensure X is a 2D numpy array
+        X = np.asarray(X)
+        if X.ndim == 1:
+            X = X.reshape(1, -1)
+
+        # Load model
+        model = joblib.load(model_path)
+
+        # Make predictions
+        preds = model.predict(X)
+
+        # Normalize anomaly label conventions: map -1 -> 1 (anomaly)
+        preds = np.array([1 if p == -1 else int(p) for p in preds])
+
+        # Try to get probabilities if available
+        probs = None
+        if hasattr(model, 'predict_proba'):
+            try:
+                probs = model.predict_proba(X)
+                # take per-sample max probability
+                max_probs = np.max(probs, axis=1)
+                mean_confidence = float(np.mean(max_probs))
+            except Exception:
+                probs = None
+                mean_confidence = None
+        else:
+            mean_confidence = None
+
+        n = len(preds)
+        num_anomalies = int(np.sum(preds == 1))
+
+        return {
+            "predictions": preds.tolist(),
+            "num_samples": n,
+            "num_anomalies": num_anomalies,
+            "anomaly_ratio": float(num_anomalies) / n if n > 0 else 0.0,
+            "prediction": "attack" if num_anomalies > 0 else "normal",
+            "confidence": mean_confidence,
+        }
+
+    except Exception as e:
+        raise Exception(f"Error predicting on saved file: {str(e)}")
