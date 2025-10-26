@@ -54,6 +54,9 @@ function handleDrop(e) {
 
 async function processFile(fileName) {
     // Show scanning status
+    // Pause star animation while processing
+    try { if (window.stars && typeof window.stars.pause === 'function') window.stars.pause(); } catch(_){}
+
     scanStatus.hidden = false;
     results.hidden = true;
     updateProgress('Analyzing file...', 50);
@@ -74,6 +77,7 @@ async function processFile(fileName) {
             updateProgress('Analysis complete', 100);
             setTimeout(() => {
                 showResults(data, fileName);
+                try { if (window.stars && typeof window.stars.resume === 'function') window.stars.resume(); } catch(_){}
             }, 500);
         } else {
             throw new Error(data.error || 'Failed to process file');
@@ -81,6 +85,7 @@ async function processFile(fileName) {
     } catch (error) {
         console.error('Error:', error);
         updateProgress('Error: ' + error.message, 0);
+        try { if (window.stars && typeof window.stars.resume === 'function') window.stars.resume(); } catch(_){}
     }
 }
 
@@ -94,6 +99,8 @@ async function processSelectedFile() {
     }
 
     // Show scanning status
+    try { if (window.stars && typeof window.stars.pause === 'function') window.stars.pause(); } catch(_){}
+
     scanStatus.hidden = false;
     results.hidden = true;
     updateProgress('Analyzing file...', 50);
@@ -114,6 +121,7 @@ async function processSelectedFile() {
             updateProgress('Analysis complete', 100);
             setTimeout(() => {
                 showResults(data, selectedFile);
+                try { if (window.stars && typeof window.stars.resume === 'function') window.stars.resume(); } catch(_){}
             }, 500);
         } else {
             throw new Error(data.error || 'Failed to process file');
@@ -121,6 +129,7 @@ async function processSelectedFile() {
     } catch (error) {
         console.error('Error:', error);
         updateProgress('Error: ' + error.message, 0);
+        try { if (window.stars && typeof window.stars.resume === 'function') window.stars.resume(); } catch(_){}
     }
 }
 
@@ -181,7 +190,6 @@ function showResults(data, fileName) {
             closeBtn.onclick();
         }
     };
-}
 }
 
 // Initial setup
