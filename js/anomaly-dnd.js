@@ -162,16 +162,50 @@ function showResults(data, fileName) {
         resultTitle.style.color = '#28a745';
         resultMessage.innerHTML = 'The analyzed traffic appears to be normal.';
     }
-    
+
+    // Helper to extract detection and confidence from different response shapes
+    function extractDetectionInfo(resp) {
+        // resp may be: { details: { prediction, confidence, is_attack } }
+        // or { prediction, confidence, is_attack } or missing
+        let det = null;
+        if (!resp) return null;
+        if (resp.details && typeof resp.details === 'object') det = resp.details;
+        else det = resp;
+        const prediction = det && (det.prediction || det.prediction === 0) ? det.prediction : null;
+        const confidence = det && (det.confidence || det.confidence === 0) ? det.confidence : null;
+        const is_attack = det && (typeof det.is_attack !== 'undefined') ? det.is_attack : null;
+        return { prediction, confidence, is_attack };
+    }
+
+    const info = extractDetectionInfo(data);
+
+    // Format detection type nicely
+    function friendlyPrediction(pred) {
+        if (!pred && pred !== 0) return 'N/A';
+        const p = String(pred).toLowerCase();
+        if (p.includes('attack') || p.includes('att') || p === '1') return 'Attack';
+        if (p.includes('normal') || p === '0') return 'Normal';
+        return String(pred);
+    }
+
+    // Format confidence: if value looks like fraction (<=1) convert to percent
+    function formatConfidence(c) {
+        if (c === null || typeof c === 'undefined') return 'N/A';
+        let num = Number(c);
+        if (isNaN(num)) return 'N/A';
+        if (num <= 1) num = num * 100; // assume fraction
+        return `${num.toFixed(2)}%`;
+    }
+
     // Add detailed information
-    resultDetails.innerHTML = `
-        <p><strong>File Analyzed:</strong> ${fileName}</p>
-        <p><strong>Analysis Status:</strong> ${data.status}</p>
-        ${data.details ? `
-            <p><strong>Detection Type:</strong> ${data.details.prediction}</p>
-            <p><strong>Confidence:</strong> ${(data.details.confidence * 100).toFixed(2)}%</p>
-        ` : ''}
-    `;
+    let detailsHtml = `\n        <p><strong>File Analyzed:</strong> ${fileName}</p>\n        <p><strong>Analysis Status:</strong> ${data.status}</p>\n    `;
+    if (info && (info.prediction || info.confidence || info.is_attack !== null)) {
+        detailsHtml += `\n            <p><strong>Detection Type:</strong> ${friendlyPrediction(info.prediction)}</p>\n            <p><strong>Confidence:</strong> ${formatConfidence(info.confidence)}</p>\n        `;
+    } else {
+        // Provide guidance when no detection info available
+        detailsHtml += `\n            <p><em>No per-record detection or confidence available for this file.</em></p>\n            <p>If you expect detection and confidence, submit a JSON feature payload or enable dataset parsing on the server.</p>\n        `;
+    }
+    resultDetails.innerHTML = detailsHtml;
     // Add download link for results.txt (if available on the server)
     const downloadWrapper = document.createElement('div');
     downloadWrapper.style.marginTop = '1rem';
