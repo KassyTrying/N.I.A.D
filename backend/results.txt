@@ -1,1 +1,1 @@
-{"file": "KDDTrain+_20Percent.txt", "lines": 25192, "message": "File processed as text; no JSON payload. A summary file was created."}
+{"file": "KDDTest-21.txt", "lines": 11850, "message": "File processed as text; no JSON payload. A summary file was created."}
