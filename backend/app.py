@@ -6,8 +6,8 @@ import pandas as pd
 import preprocess_improved as preprocessor
 import json
 import detect_realtime
-
-app = Flask(__name__)
+from flask import Flask, render_template
+app = Flask(__name__,template_folder='../', static_folder='../static')
 CORS(app)
 
 @app.route('/health', methods=['GET'])
@@ -143,6 +143,19 @@ def model_info():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/', methods=['GET'])
+def home():
+   return render_template('index.html')
+
+@app.route('/anomaly', methods=['GET'])
+def page2():
+   return render_template('anomaly.html')
+@app.route('/intrusion', methods=['GET'])
+def page3():
+   return render_template('intrusion.html')
+@app.route('/live', methods=['GET'])
+def page4():
+   return render_template('live.html')
 
 @app.route('/results-file', methods=['GET'])
 def get_results_file():
@@ -155,6 +168,7 @@ def get_results_file():
         return send_file(results_path, mimetype='application/json', as_attachment=True, download_name='results.txt')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

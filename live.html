@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>N.I.A.D - Live Monitoring</title>
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/stars.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stars.css') }}">
 </head>
 <body>
     <div class="stars"></div>
@@ -14,7 +14,7 @@
             <h1>Live Monitoring</h1>
             <p class="lead">Monitor your network in real-time with N.I.A.D's live monitoring feature. Stay ahead of potential threats and anomalies as they happen.</p>
             <div class="action">
-                <a class="btn btn-primary" href="index.html">Home</a>
+                <a class="btn btn-primary" href="/">Home</a>
             </div>
         </section>
         
@@ -102,7 +102,7 @@
             </div>
         </section>
     </main>
-    <script src="js/stars.js"></script>
-    <script src="js/live-monitor.js"></script>
+    <script src="{{ url_for('static', filename='js/stars.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/live-monitor.js') }}"></script>
 </body>
 </html>

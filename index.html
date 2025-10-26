@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>N.I.A.D - Network Intrusion & Anomaly Detector</title>
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/stars.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stars.css') }}">
 </head>
 <body>
     <div class="stars"></div>
@@ -16,9 +16,9 @@
             <p class="lead">An advanced system designed to monitor, detect, and respond to network threats in real-time, ensuring the security and integrity of your digital infrastructure.</p>
             
             <div class="action" role="navigation" aria-label="Primary actions">
-                <a class="btn btn-primary" href="anomaly.html">Anomaly</a>
-                <a class="btn btn-primary" href="intrusion.html">Intrusion</a>
-                <a class="btn btn-primary" href="live.html">Live Monitoring</a>
+                <a class="btn btn-primary" href="anomaly">Anomaly</a>
+                <a class="btn btn-primary" href="intrusion">Intrusion</a>
+                <a class="btn btn-primary" href="live">Live Monitoring</a>
             </div>
         </section>
 
@@ -33,7 +33,7 @@
         </aside>
     </main>
 
-    <script src="js/stars.js"></script>
+    <script src="{{ url_for('static', filename='js/stars.js') }}"></script>
 </body>
         
 </html>
