@@ -4,30 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>N.I.A.D - Live Monitoring</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="./static/css/index.css">
     <link rel="stylesheet" href="./static/css/stars.css">
-=======
-        <link rel="stylesheet" href="./static/css/index.css">
-        <link rel="stylesheet" href="./static/css/stars.css">
-        <!-- Google Fonts for Space-Western theme -->
-        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-        <!-- Space-Western theme -->
-        <link rel="stylesheet" href="./static/css/space-western.css">
->>>>>>> 84628bddd2484182770946d8a274e2cb79c4768a
+    <link rel="stylesheet" href="./static/css/space-western.css">
 </head>
 <body class="sw-theme">
     <div class="stars"></div>
     <main class="card" role="main">
-        <section class="hero">
+        <section class="hero" style="text-align:center;">
             <h1>Live Monitoring</h1>
-            <p class="lead">Monitor your network in real-time with N.I.A.D's live monitoring feature. Stay ahead of potential threats and anomalies as they happen.</p>
+            <p class="lead">Real-time overview of your network status and recent scans.</p>
             <div class="action">
-                <a class="btn btn-primary" href="/">Home</a>
+                <a class="btn btn-primary" href="index.html">Home</a>
             </div>
         </section>
-        
-                <section class="live-monitor" aria-label="NetWork Live Monitoring">
+
+
+        <section class="live-monitor" aria-label="Network Live Monitoring">
             <!-- Network Status -->
             <div class="network-status">
                 <h3>Current Network Connection</h3>
@@ -49,6 +42,7 @@
                 </div>
             </div>
 
+
             <!-- Scan Controls -->
             <div class="scan-controls">
                 <button id="scan-btn" class="btn btn-primary scan-button">
@@ -58,6 +52,7 @@
                 <p class="small scan-hint">Scans for anomalies and intrusions on your network</p>
             </div>
 
+
             <!-- Scanning Status -->
             <div id="scanning-status" class="scanning-status" hidden>
                 <h3>Scanning Network...</h3>
@@ -66,6 +61,7 @@
                 </div>
                 <p class="status-text small" id="scan-status-text">Initializing scan...</p>
             </div>
+
 
             <!-- Scan Report -->
             <div id="scan-report" class="scan-report" hidden>
@@ -79,7 +75,7 @@
                         Completed: <span id="scan-time">--:--:--</span>
                     </div>
                 </div>
-        
+       
                 <div class="report-details">
                     <div class="detail-section">
                         <h4>Anomaly Detection</h4>
@@ -89,7 +85,7 @@
                             <li>✓ Connection behavior: No anomalies detected</li>
                         </ul>
                     </div>
-          
+         
                     <div class="detail-section">
                         <h4>Intrusion Detection</h4>
                         <ul class="detail-list" id="intrusion-list">
@@ -98,6 +94,7 @@
                             <li>✓ Malicious signatures: None found</li>
                         </ul>
                     </div>
+
 
                     <div class="detail-section">
                         <h4>Network Statistics</h4>
@@ -115,3 +112,4 @@
     <script src="./static/js/live-monitor.js"></script>
 </body>
 </html>
+

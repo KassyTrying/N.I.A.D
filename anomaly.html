@@ -4,52 +4,98 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title> Anomaly - N.I.A.D </title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="./static/css/index.css">
     <link rel="stylesheet" href="./static/css/stars.css">
-=======
-    <link rel="stylesheet" href="./static/css/index.css">
-    <link rel="stylesheet" href="./static/css/stars.css">
-    <link rel="stylesheet" href="./static/css/anomaly.css">
-    <!-- Google Fonts for Space-Western theme -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Space-Western theme (scoped under .sw-theme) -->
     <link rel="stylesheet" href="./static/css/space-western.css">
->>>>>>> 84628bddd2484182770946d8a274e2cb79c4768a
   </head>
 
-<body class="sw-theme">
+<body>
   <div class="stars"> </div>
   <main class="card" role="main">
     <section class="hero">
       <h1> Anomaly detector </h1>
       <p class ="lead"> Drag a data source into the dropzone to simulate an anomaly scam. Backend wiring coming soon </p>
       <div class ="actions">
-        <a class ="btn btn-primary" href="/">Back</a>
+        <a class ="btn btn-primary" href="index.html">Back</a>
       </div>
     </section>
     <section class="anomaly-dnd" aria-label="Anomaly drag and drop">
       <div class="dnd-sources" aria-label="Data sources" role="list">
-        <!-- draggable initially false: enabled when scanner is ready -->
-        <button class="source" draggable="false" data-file="KDDTest+.txt" role="listitem" aria-label="Test Dataset 1">
-          <span class="icon" aria-hidden="true">🤠</span>
+        <button class="source" draggable="true" data-file="KDDTest+.txt" role="listitem" aria-label="Test Dataset 1">
+          <span class="icon">📊</span>
           <span class="label">Test Dataset 1</span>
+          <span class="file-name">KDDTest+.txt</span>
         </button>
-        <button class="source" draggable="false" data-file="KDDTest-21.txt" role="listitem" aria-label="Test Dataset 2">
-          <span class="icon" aria-hidden="true">⭐</span>
+        <button class="source" draggable="true" data-file="KDDTest-21.txt" role="listitem" aria-label="Test Dataset 2">
+          <span class="icon">�</span>
           <span class="label">Test Dataset 2</span>
+          <span class="file-name">KDDTest-21.txt</span>
         </button>
-        <button class="source" draggable="false" data-file="KDDTrain+_20Percent.txt" role="listitem" aria-label="Test Dataset 3">
-          <span class="icon" aria-hidden="true">🌵</span>
+        <button class="source" draggable="true" data-file="KDDTrain+_20Percent.txt" role="listitem" aria-label="Test Dataset 3">
+          <span class="icon">�</span>
           <span class="label">Test Dataset 3</span>
+          <span class="file-name">KDDTrain+_20Percent.txt</span>
         </button>
       </div>
+      <style>
+        .dnd-sources {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+        
+        .source {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px dashed rgba(255, 255, 255, 0.2);
+          border-radius: 8px;
+          cursor: move;
+          transition: all 0.3s ease;
+          width: 150px;
+          height: 150px;
+        }
+        
+        .source:hover {
+          background: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.4);
+          transform: translateY(-2px);
+        }
+        
+        .source .icon {
+          font-size: 2.5rem;
+          margin-bottom: 0.5rem;
+        }
+        
+        .source .label {
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+          text-align: center;
+        }
+        
+        .source .file-name {
+          font-size: 0.8rem;
+          color: rgba(255, 255, 255, 0.6);
+          text-align: center;
+        }
+        
+        .source.dragging {
+          opacity: 0.5;
+          transform: scale(0.95);
+        }
+      </style>
       <div id="dropzone" class="dropzone" tabindex="0" aria-label="Drop files or sources here">
         <div class="dz-inner">
           <div class="dz-cta"> Drag & drop here or click to choose a file</div>
           <input id="file-input" type="file" hidden/>
         </div>
-        <!-- scan-status removed; CTA will indicate readiness -->
+      </div>
+      <div class="scan-status" aria-live="polite" aria-atomic="true" hidden>
+        <div class="progress"><div class="bar" style="width:0%"></div></div>
+        <div class="status-text small">Preparing scan...</div>
       </div>
       
       <!-- Modal Popup -->
@@ -70,7 +116,95 @@
         </div>
       </div>
       
-      
+      <style>
+        .modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          z-index: 1000;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        
+        .modal.show {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          opacity: 1;
+        }
+        
+        .modal-content {
+          background: #1e1e1e;
+          border-radius: 12px;
+          padding: 0;
+          width: 90%;
+          max-width: 500px;
+          position: relative;
+          transform: scale(0.7);
+          transition: transform 0.3s ease;
+        }
+        
+        .modal.show .modal-content {
+          transform: scale(1);
+        }
+        
+        .modal-header {
+          padding: 1.5rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        .modal-header h2 {
+          margin: 0;
+          color: #fff;
+          font-size: 1.5rem;
+        }
+        
+        .close-modal {
+          color: rgba(255, 255, 255, 0.5);
+          font-size: 1.8rem;
+          cursor: pointer;
+          transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+          color: #fff;
+        }
+        
+        .modal-body {
+          padding: 2rem;
+        }
+        
+        .result-icon {
+          font-size: 4rem;
+          text-align: center;
+          margin-bottom: 1rem;
+        }
+        
+        .result-title {
+          text-align: center;
+          margin: 1rem 0;
+          color: #fff;
+        }
+        
+        .result-message {
+          text-align: center;
+          color: rgba(255, 255, 255, 0.8);
+          margin-bottom: 1.5rem;
+        }
+        
+        .result-details {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 8px;
+          padding: 1rem;
+        }
+      </style>
     </section>
   </main>
   <script src="./static/js/stars.js"></script>
