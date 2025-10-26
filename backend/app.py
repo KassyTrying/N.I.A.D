@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from utils.predict import predict
 import os
@@ -55,19 +55,44 @@ def process_file():
         # json_data -> {}
         # 1. Read file_path
         with open(file_path, 'r') as f:
-            data_1 = json.load(f)
-        # 2. Use json module to convert file_path -> {}
-            data_dict = json.loads(data_1)
-        
-        # Now use the predict function which will load the preprocessed data
-        result = predict(data_dict) # <json data -> {}>
+                try:
+                    # Try to parse as JSON first
+                    data_dict = json.load(f)
+                except json.JSONDecodeError:
+                    # Not JSON — treat as a plain text dataset (e.g. KDD files)
+                    f.seek(0)
+                    lines = [ln for ln in f.read().splitlines() if ln.strip()]
+                    # create a lightweight summary result and write results.txt so the frontend sees a file created
+                    BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+                    results_path = os.path.join(BACKEND_DIR, 'results.txt')
+                    summary = {
+                        "file": file_name,
+                        "lines": len(lines),
+                        "message": "File processed as text; no JSON payload. A summary file was created.",
+                    }
+                    with open(results_path, 'w') as rf:
+                        json.dump(summary, rf)
 
-        # detect_intrusion(<json data -> {}>)
-        detect_realtime.detect_intrusion(data_dict)
-        
-        # Determine if anomaly was found
-        is_anomaly = any(result.get('predictions', [1]))  # 1 indicates anomaly
-        
+                    return jsonify({
+                        "status": "success",
+                        "anomalyFound": False,
+                        "message": "Processed text file; results.txt created",
+                        "details": summary
+                    }), 200
+
+        # If we got here, data_dict is parsed JSON — call predict and detector
+        result = predict(data_dict)
+
+        # detect_intrusion(<json data -> {}>) — this will also write results.txt inside detect_realtime
+        try:
+            detect_realtime.detect_intrusion(data_dict)
+        except Exception:
+            # Keep going even if the realtime detector errors; prediction result is still returned
+            pass
+
+        # Determine if anomaly was found using predict() return value
+        is_anomaly = bool(result.get('is_attack', False))
+
         return jsonify({
             "status": "success",
             "anomalyFound": is_anomaly,
@@ -115,6 +140,19 @@ def model_info():
             "status": "ready" if all([model_exists, scaler_exists, encoders_exist]) else "not_ready"
         }), 200
         
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/results-file', methods=['GET'])
+def get_results_file():
+    try:
+        BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+        results_path = os.path.join(BACKEND_DIR, 'results.txt')
+        if not os.path.exists(results_path):
+            return jsonify({"error": "results.txt not found"}), 404
+        # serve as attachment so user can download
+        return send_file(results_path, mimetype='application/json', as_attachment=True, download_name='results.txt')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

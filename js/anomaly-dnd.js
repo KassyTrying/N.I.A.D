@@ -172,6 +172,22 @@ function showResults(data, fileName) {
             <p><strong>Confidence:</strong> ${(data.details.confidence * 100).toFixed(2)}%</p>
         ` : ''}
     `;
+    // Add download link for results.txt (if available on the server)
+    const downloadWrapper = document.createElement('div');
+    downloadWrapper.style.marginTop = '1rem';
+    const downloadLink = document.createElement('a');
+    downloadLink.href = `${BACKEND_URL}/results-file`;
+    downloadLink.className = 'btn btn-primary';
+    downloadLink.textContent = 'Download results.txt';
+    downloadLink.style.display = 'inline-block';
+    downloadLink.style.padding = '0.5rem 1rem';
+    downloadLink.style.borderRadius = '6px';
+    downloadLink.style.background = '#007bff';
+    downloadLink.style.color = '#fff';
+    downloadLink.style.textDecoration = 'none';
+    downloadLink.target = '_blank';
+    downloadWrapper.appendChild(downloadLink);
+    resultDetails.appendChild(downloadWrapper);
     
     // Show modal with animation
     modal.hidden = false;

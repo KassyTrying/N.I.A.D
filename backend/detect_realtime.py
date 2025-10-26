@@ -126,7 +126,10 @@ def detect_intrusion(data_dict):
             "probability_attack": float(probabilities[1]),
             "top_features": top_features
         }
-        with open('results.txt', 'w') as json_file:
+        # Write results to backend/results.txt so it's easy to find from the server
+        BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+        results_path = os.path.join(BACKEND_DIR, 'results.txt')
+        with open(results_path, 'w') as json_file:
             json.dump(result, json_file)
         return result
         
