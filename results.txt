@@ -1,0 +1,1 @@
+{"prediction": "NORMAL", "confidence": 0.9990596078206063, "is_attack": false, "probability_normal": 0.9990596078206063, "probability_attack": 0.0009403921793936885, "top_features": {"src_bytes": 0.19269713054717877, "dst_bytes": 0.10568780475457037, "flag": 0.0869845358157741, "same_srv_rate": 0.08028986059856144, "dst_host_same_srv_rate": 0.05791777290528619}}

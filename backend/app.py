@@ -4,6 +4,8 @@ from utils.predict import predict
 import os
 import pandas as pd
 import preprocess_improved as preprocessor
+import json
+import detect_realtime
 
 app = Flask(__name__)
 CORS(app)
@@ -41,15 +43,27 @@ def process_file():
         BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
         DATA_DIR = os.path.join(BACKEND_DIR, "data")
         file_path = os.path.join(DATA_DIR, file_name)
-        
+        print(BACKEND_DIR)
+        print(DATA_DIR)
+        print(file_path)
         if not os.path.exists(file_path):
             return jsonify({"error": f"File {file_name} not found"}), 404
             
         # Preprocess the file using the improved preprocessor
-        preprocessor.preprocess_data(input_file=file_path)
+        # preprocessor.preprocess_data(input_file=file_path)
+
+        # json_data -> {}
+        # 1. Read file_path
+        with open(file_path, 'r') as f:
+            data_1 = json.load(f)
+        # 2. Use json module to convert file_path -> {}
+            data_dict = json.loads(data_1)
         
         # Now use the predict function which will load the preprocessed data
-        result = predict({})
+        result = predict(data_dict) # <json data -> {}>
+
+        # detect_intrusion(<json data -> {}>)
+        detect_realtime.detect_intrusion(data_dict)
         
         # Determine if anomaly was found
         is_anomaly = any(result.get('predictions', [1]))  # 1 indicates anomaly

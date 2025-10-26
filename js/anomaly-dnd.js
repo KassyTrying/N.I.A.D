@@ -55,7 +55,7 @@ function handleDrop(e) {
 async function processFile(fileName) {
     // Show scanning status
     scanStatus.hidden = false;
-    results.hidden = true;
+    // results.hidden = true;
     updateProgress('Analyzing file...', 50);
 
     try {
@@ -68,7 +68,7 @@ async function processFile(fileName) {
         });
 
         const data = await response.json();
-        
+        console.log(data);
         if (response.ok) {
             // Show results
             updateProgress('Analysis complete', 100);
@@ -182,11 +182,10 @@ function showResults(data, fileName) {
         }
     };
 }
-}
 
 // Initial setup
 document.addEventListener('DOMContentLoaded', () => {
-    fetchAvailableFiles();
+    // fetchAvailableFiles();
 });
 
 // Handle drag and drop functionality

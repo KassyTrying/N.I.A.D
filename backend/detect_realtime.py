@@ -3,6 +3,7 @@ import numpy as np
 import joblib
 import os
 import sys
+import json
 
 def load_model_elements():
     """Load all required model elements with proper error handling"""
@@ -118,14 +119,15 @@ def detect_intrusion(data_dict):
         )[:5])
         
         result = {
-            "prediction": "ATTACK 🚨" if prediction == 1 else "NORMAL ✅",
+            "prediction": "ATTACK" if prediction == 1 else "NORMAL",
             "confidence": float(max(probabilities)),
             "is_attack": bool(prediction == 1),
             "probability_normal": float(probabilities[0]),
             "probability_attack": float(probabilities[1]),
             "top_features": top_features
         }
-        
+        with open('results.txt', 'w') as json_file:
+            json.dump(result, json_file)
         return result
         
     except Exception as e:
