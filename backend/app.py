@@ -1,36 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from utils.predict import predict
 import os
-import sys
-
-# Ensure the backend directory is on sys.path so local imports work when running
-# the app from the repository root. This makes imports like `import preprocess_improved`
-# and `from utils.predict import predict` reliable.
-BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
-if BACKEND_DIR not in sys.path:
-    sys.path.insert(0, BACKEND_DIR)
-
-import importlib.util
 import pandas as pd
-
-# Dynamically load utility modules from the backend/utils folder to avoid
-# relying on package layout or sys.path order. This keeps imports robust when
-# running the app from different working directories.
-def _load_module_from_path(name, path):
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-_utils_dir = os.path.join(BACKEND_DIR, 'utils')
-_predict_path = os.path.join(_utils_dir, 'predict.py')
-_preproc_path = os.path.join(_utils_dir, 'preprocess_improved.py')
-
-_predict_mod = _load_module_from_path('predict', _predict_path)
-predict = _predict_mod.predict
-
-_preproc_mod = _load_module_from_path('preprocess_improved', _preproc_path)
-preprocessor = _preproc_mod
+import preprocess_improved as preprocessor
 
 app = Flask(__name__)
 CORS(app)
@@ -75,24 +48,11 @@ def process_file():
         # Preprocess the file using the improved preprocessor
         preprocessor.preprocess_data(input_file=file_path)
         
-        # Now run predictions over the preprocessed file that was saved by the
-        # preprocessor. The `predict_file` helper loads `model/X_scaled.pkl`
-        # and the trained model to produce per-sample predictions.
-        if hasattr(_predict_mod, 'predict_file'):
-            result = _predict_mod.predict_file()
-        else:
-            # Fallback: try calling the regular predict function (legacy)
-            result = predict({})
-
+        # Now use the predict function which will load the preprocessed data
+        result = predict({})
+        
         # Determine if anomaly was found
-        # Expect result to include a 'predictions' list of 0/1 values
-        preds = result.get('predictions') if isinstance(result, dict) else None
-        if preds is None:
-            # If predictions aren't provided, conservatively assume anomaly if
-            # the returned prediction string contains 'attack'.
-            is_anomaly = str(result.get('prediction', '')).lower() == 'attack'
-        else:
-            is_anomaly = any(int(p) == 1 for p in preds)
+        is_anomaly = any(result.get('predictions', [1]))  # 1 indicates anomaly
         
         return jsonify({
             "status": "success",

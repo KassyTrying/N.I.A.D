@@ -26,30 +26,21 @@ After training, feed new, live network traffic to your model. Any significant de
 When an anomaly is detected, the system can print an alert to the console or log the details of the suspicious activity.</br>
 
 # Final Project Structure : 
-N.I.A.D/
+N.I.A.D/ </br> 
 │
-├── backend/ </br>
-│   ├── data/ </br>
-│   │   └── KDDTrain+.txt </br>
-│   │   └── KDDTest+.txt </br>
-│   ├── model/ </br>
-│   │   └── X_scaled.pkl </br>
-│   │   └── y.pkl </br>
-│   │   └── categorical_encoders.pkl </br>
-│   │   └── isolation_forest.pkl </br>
-│   │   └── random_forest.pkl </br>
-│   │   └── scaler.pkl </br>
-│   │   └── train_model.py </br>
-│   ├── app.py </br>
-│   ├── backend.md </br>
-│   ├── detect_realtime.py </br>
-│   ├── preprocess_improved.py </br>
-│   ├── quickstart.py </br>
-│   ├── requirements.txt </br>
-│   ├── test_model.py </br>
-│   ├── test_system.py </br>
-
-
+├── backend/ </br> 
+│   ├── app.py                # Flask/FastAPI server </br> 
+│   ├── preprocess.py         # Clean + encode + scale NSL-KDD data </br> 
+│   ├── train_model.py        # Train and save ML model </br> 
+│   ├── test_model.py         # Evaluate accuracy</br> 
+│   ├── models/</br>
+│   │   └── niad_model.pkl    # Saved trained model</br>
+│   ├── data/</br>
+│   │   └── KDDTrain+.txt</br>
+│   │   └── KDDTest+.txt</br>
+│   ├── requirements.txt      # Dependencies</br>
+│   └── backend.md            # Your progress documentation</br>
+│</br>
 frontend/ </br>
 │
 ├── index.html  </br>
@@ -65,4 +56,4 @@ frontend/ </br>
 ├── README.md                 # Project summary + how to run</br>
 └── .gitignore</br>
 
-API to be used - Flask
+API to be used - Flask/ Auth0

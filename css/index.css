@@ -1,12 +1,7 @@
 /*
     Chat Bot / Anomaly UI styles for anomaly.html
     Integrated full stylesheet block (chat-bot, DnD, live monitor, etc.)
-:*/
-/*
-    Chat Bot / Anomaly UI styles for anomaly.html
-    Integrated full stylesheet block (chat-bot, DnD, live monitor, etc.)
 */
-
 .chat-bot {
     display: flex;
     flex-direction: column;
