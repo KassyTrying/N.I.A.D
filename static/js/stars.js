@@ -70,18 +70,43 @@ window.addEventListener('resize', debounce(createStars, 150));
 // Other scripts can call `window.stars.pause()` and `window.stars.resume()`.
 window.stars = {
 	pause() {
-		try { document.body.classList.add('pause-stars'); } catch(_){}
-		// Set flag so createStars will defer heavy work while paused
-		window.__stars_paused = true;
+		// Smoothly transition to paused state: add a 'pausing' class then
+		// set the final 'pause-stars' class after a short delay so CSS can
+		// cross-fade opacity/transform instead of jumping abruptly.
+		try { document.body.classList.add('pausing-stars'); } catch(_){ }
+		if (window.__stars_pause_timer) clearTimeout(window.__stars_pause_timer);
+		window.__stars_pause_timer = setTimeout(() => {
+			try { document.body.classList.add('pause-stars'); } catch(_){ }
+			try { document.body.classList.remove('pausing-stars'); } catch(_){ }
+			// Set flag so createStars will defer heavy work while paused
+			window.__stars_paused = true;
+			// After the visual fade finishes, move into a deeper pause state
+			// that removes CSS animations to reduce CPU. This is delayed a bit
+			// longer than the visual cross-fade so the switch isn't abrupt.
+			if (window.__stars_deep_timer) clearTimeout(window.__stars_deep_timer);
+			window.__stars_deep_timer = setTimeout(() => {
+				try { document.body.classList.add('pause-stars-deep'); } catch(_){ }
+			}, 260);
+		}, 180);
 	},
 	resume() {
-		try { document.body.classList.remove('pause-stars'); } catch(_){}
-		// If a regenerate was requested while paused, run it now
-		window.__stars_paused = false;
-		if (window.__stars_pending_recreate) {
-			window.__stars_pending_recreate = false;
-			try { createStars(); } catch(_){}
-		}
+		// Smoothly resume: remove the paused class after a short fade so
+		// the stars visually cross-fade back into motion.
+		try { document.body.classList.add('resuming-stars'); } catch(_){ }
+		// clear pause timers and the deep pause state immediately so DOM animations
+		// can be restored cleanly when we resume
+		if (window.__stars_pause_timer) { clearTimeout(window.__stars_pause_timer); window.__stars_pause_timer = null; }
+		if (window.__stars_deep_timer) { clearTimeout(window.__stars_deep_timer); window.__stars_deep_timer = null; }
+		try { document.body.classList.remove('pause-stars-deep'); } catch(_){ }
+		setTimeout(() => {
+			try { document.body.classList.remove('pause-stars'); } catch(_){ }
+			try { document.body.classList.remove('resuming-stars'); } catch(_){ }
+			window.__stars_paused = false;
+			if (window.__stars_pending_recreate) {
+				window.__stars_pending_recreate = false;
+				try { createStars(); } catch(_){ }
+			}
+		}, 180);
 	},
 	isPaused() { return !!window.__stars_paused; },
 	recreate() { try { createStars(); } catch(_){} }

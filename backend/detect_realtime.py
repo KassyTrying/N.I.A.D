@@ -37,6 +37,19 @@ def load_model_elements():
         print(f"[ERROR] Failed to load model elements: {str(e)}")
         raise
 
+
+# Cache model elements at module import to avoid re-loading on every call
+MODEL = None
+SCALER = None
+ENCODERS = None
+try:
+    MODEL, SCALER, ENCODERS = load_model_elements()
+except Exception:
+    # Leave as None; callers will surface errors if invoked without models
+    MODEL = None
+    SCALER = None
+    ENCODERS = None
+
 def preprocess_input(data_dict, scaler, encoders):
     """Preprocess input data with validation and error handling"""
     try:
@@ -95,8 +108,11 @@ def preprocess_input(data_dict, scaler, encoders):
 def detect_intrusion(data_dict):
     """Detect intrusion with confidence scores and feature importance"""
     try:
-        # Load model components
-        model, scaler, encoders = load_model_elements()
+        # Use cached model components when available
+        global MODEL, SCALER, ENCODERS
+        if MODEL is None or SCALER is None or ENCODERS is None:
+            MODEL, SCALER, ENCODERS = load_model_elements()
+        model, scaler, encoders = MODEL, SCALER, ENCODERS
         
         # Preprocess input
         X = preprocess_input(data_dict, scaler, encoders)

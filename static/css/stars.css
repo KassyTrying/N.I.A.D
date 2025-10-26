@@ -1,31 +1,31 @@
 /*
 	Star field styles (centralized)
-	These rules use higher specificity and !important flags to ensure the
-	star-field renders above the UI when required. If you prefer the stars
-	behind the UI, remove the !important flags and/or lower the z-index.
+	The star field is rendered behind the UI so it doesn't cover cards or
+	controls. If you prefer the stars above the UI, increase the z-index
+	here or set a higher z-index on .star elements.
 */
 .stars {
-	position: fixed !important;
-	top: 0 !important;
-	left: 0 !important;
-	width: 100vw !important;
-	height: 100vh !important;
-	z-index: 999 !important; /* put stars above the UI so they're always visible */
-	pointer-events: none !important;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 0; /* keep stars behind the UI */
+	pointer-events: none;
 }
 
 .star {
-	position: absolute !important;
-	background: #ffffff !important;
-	border-radius: 50% !important;
-	box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.25) !important;
-	animation: twinkleRandom var(--twinkle-duration, 4s) ease-in-out infinite !important;
-	animation-delay: var(--twinkle-delay, 0s) !important;
+	position: absolute;
+	background: #ffffff;
+	border-radius: 50%;
+	box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.18);
+	animation: twinkleRandom var(--twinkle-duration, 4s) ease-in-out infinite;
+	animation-delay: var(--twinkle-delay, 0s);
 }
 
 .star.large {
-	box-shadow: 0 0 12px 4px rgba(255, 255, 255, 0.45) !important;
-	background: #fff !important;
+	box-shadow: 0 0 12px 4px rgba(255, 255, 255, 0.36);
+	background: #fff;
 }
 
 @keyframes twinkleRandom {
@@ -41,7 +41,32 @@
 
 /* Allow scripts to fully pause the star animations by adding 'pause-stars' to <body> */
 .pause-stars .star {
-    animation: none !important;
-    opacity: 0.9 !important; /* keep visually present while paused */
+	/* Pause the twinkle animation but smoothly cross-fade opacity/scale
+	   so the change isn't abrupt. animation-play-state 'paused' keeps
+	   the element at its current keyframe while CSS transitions handle
+	   the visual fade. */
+	animation-play-state: paused !important;
+	transition: opacity 220ms ease, transform 220ms ease;
+	opacity: 0.45 !important;
+	transform: scale(0.92);
+}
+
+/* Transitional helper classes for nicer cross-fade */
+.pausing-stars .star {
+	transition: opacity 220ms ease, transform 220ms ease;
+	opacity: 0.6;
+}
+.resuming-stars .star {
+	transition: opacity 220ms ease, transform 220ms ease;
+	opacity: 0.9;
+}
+
+/* Deep pause removes animation entirely to reduce CPU. Applied slightly
+   after the visual fade so the switch is not abrupt. */
+.pause-stars-deep .star {
+	animation: none !important;
+	/* keep muted visual while deeply paused */
+	opacity: 0.45 !important;
+	transform: scale(0.92);
 }
 

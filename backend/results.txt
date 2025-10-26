@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"file": "KDDTrain+_20Percent.txt", "lines": 25192, "message": "File processed as text; no JSON payload. A summary file was created."}
+=======
+{"file": "KDDTest+.txt", "lines": 22544, "message": "File processed as text; no JSON payload. A summary file was created."}
+>>>>>>> 84628bddd2484182770946d8a274e2cb79c4768a

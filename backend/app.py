@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
-from utils.predict import predict
+from utils.predict import predict, ensure_models_loaded
 import os
 import pandas as pd
 import preprocess_improved as preprocessor
@@ -157,6 +157,35 @@ def page3():
 def page4():
    return render_template('live.html')
 
+@app.route('/status', methods=['GET'])
+def status():
+    """Lightweight status endpoint that ensures models are warmed up when possible."""
+    try:
+        try:
+            ensure_models_loaded()
+        except Exception:
+            # If ensure_models_loaded fails, still return files existence info
+            pass
+
+        model_ready = False
+        try:
+            res = model_info()[0]
+            # model_info returns a flask response tuple; attempt to read its JSON
+            # but fallback to filesystem checks below
+        except Exception:
+            res = None
+
+        BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+        model_exists = os.path.exists(os.path.join(BACKEND_DIR, "model", "random_forest.pkl"))
+        scaler_exists = os.path.exists(os.path.join(BACKEND_DIR, "model", "scaler.pkl"))
+        encoders_exist = os.path.exists(os.path.join(BACKEND_DIR, "model", "categorical_encoders.pkl"))
+        model_ready = all([model_exists, scaler_exists, encoders_exist])
+
+        return jsonify({"ready": bool(model_ready)}), 200
+    except Exception as e:
+        return jsonify({"ready": False, "error": str(e)}), 500
+
+
 @app.route('/results-file', methods=['GET'])
 def get_results_file():
     try:
@@ -171,4 +200,10 @@ def get_results_file():
 
 
 if __name__ == '__main__':
+    # Attempt to warm model assets at startup to reduce first-request latency
+    try:
+        ensure_models_loaded()
+    except Exception:
+        # Ignore errors here; /status will still report readiness
+        pass
     app.run(debug=True, host='0.0.0.0', port=5000)
