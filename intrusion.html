@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Intrusion — N.I.A.D</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/stars.css">
+</head>
+<body>
+  <div class="stars"></div>
+  <main class="card chat-bot" role="main">
+    <section class="chat-header">
+      <h1>Intrusion Detector</h1>
+      <p class="lead">Ask about intrusion detection or select a prompt below.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="index.html">Back</a>
+      </div>
+    </section>
+    <section class="chat-area">
+      <div id="chat" class="chat-window" aria-live="polite" aria-atomic="false">
+        <!-- Chat messages will appear here -->
+      </div>
+
+      <!-- input removed: interaction will be via prompt buttons only -->
+    </section>
+
+    <!-- prompt bar positioned at the bottom of the card -->
+    <div id="prompt-bar" class="prompt-bar" aria-label="Suggested prompts">
+      <!-- Prompt buttons will be rendered here -->
+    </div>
+  </main>
+  <script src="js/stars.js"></script>
+  <script src="js/intrusion-chat.js"></script>
+</body>
+</html>

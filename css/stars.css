@@ -39,3 +39,9 @@
 	}
 }
 
+/* Allow scripts to fully pause the star animations by adding 'pause-stars' to <body> */
+.pause-stars .star {
+    animation: none !important;
+    opacity: 0.9 !important; /* keep visually present while paused */
+}
+

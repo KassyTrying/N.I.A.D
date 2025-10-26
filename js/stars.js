@@ -6,6 +6,12 @@ function createStars() {
 	const card = document.querySelector('.card');
 	if (!starsContainer) return;
 
+	// If animations are currently paused, defer heavy regeneration until resume
+	if (document.body && document.body.classList.contains('pause-stars')){
+		window.__stars_pending_recreate = true;
+		return;
+	}
+
 	// Clear existing stars
 	starsContainer.innerHTML = '';
 
@@ -59,4 +65,28 @@ function debounce(fn, wait){
 
 window.addEventListener('DOMContentLoaded', createStars);
 window.addEventListener('resize', debounce(createStars, 150));
+
+// Expose a small API to pause/resume the twinkle animation programmatically.
+// Other scripts can call `window.stars.pause()` and `window.stars.resume()`.
+window.stars = {
+	pause() {
+		try { document.body.classList.add('pause-stars'); } catch(_){}
+		// Set flag so createStars will defer heavy work while paused
+		window.__stars_paused = true;
+	},
+	resume() {
+		try { document.body.classList.remove('pause-stars'); } catch(_){}
+		// If a regenerate was requested while paused, run it now
+		window.__stars_paused = false;
+		if (window.__stars_pending_recreate) {
+			window.__stars_pending_recreate = false;
+			try { createStars(); } catch(_){}
+		}
+	},
+	isPaused() { return !!window.__stars_paused; },
+	recreate() { try { createStars(); } catch(_){} }
+};
+
+// Backwards-compatible global reference (some pages call createStars directly)
+window.createStars = createStars;
 
