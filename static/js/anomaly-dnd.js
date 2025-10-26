@@ -137,7 +137,7 @@ async function processFile(fileName) {
     } catch (_){ }
 
     if (scanStatus) scanStatus.hidden = false;
-    // results.hidden = true;
+    results.hidden = true;
     updateProgress('Analyzing file...', 50);
 
     try {
