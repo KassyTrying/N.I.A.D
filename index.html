@@ -4,33 +4,63 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>N.I.A.D - Network Intrusion & Anomaly Detector</title>
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/stars.css">
+        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/stars.css">
+        <!-- Google Fonts for Space-Western theme -->
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+        <!-- Space-Western theme -->
+        <link rel="stylesheet" href="css/space-western.css">
 </head>
-<body>
+<body class="sw-theme">
     <div class="stars"></div>
-    <main class="card with-panel" role="main">
-        <section class="hero">
-            <h1>N.I.A.D</h1>
-            <h2>Network Intrusion & Anomaly Detector</h2>
-            <p class="lead">An advanced system designed to monitor, detect, and respond to network threats in real-time, ensuring the security and integrity of your digital infrastructure.</p>
-            
-            <div class="action" role="navigation" aria-label="Primary actions">
-                <a class="btn btn-primary" href="anomaly.html">Anomaly</a>
-                <a class="btn btn-primary" href="intrusion.html">Intrusion</a>
-                <a class="btn btn-primary" href="live.html">Live Monitoring</a>
+    <main class="card" role="main">
+        <section class="product-hero hero">
+            <div class="hero-inner">
+                <div class="hero-copy">
+                    <h1>N.I.A.D</h1>
+                    <h2>Network Intrusion & Anomaly Detector</h2>
+                    <p class="lead">Protect your network with real-time anomaly detection, intelligent threat scoring, and automated response orchestration — built for scale and simplicity.</p>
+                    <div class="action" role="navigation" aria-label="Primary actions">
+                        <a class="btn btn-primary" href="anomaly.html">Anomaly</a>
+                        <a class="btn btn-primary" href="intrusion.html">Intrusion</a>
+                        <a class="btn btn-primary" href="live.html">Live Monitoring</a>
+                    </div>
+                    
+                </div>
+                
             </div>
         </section>
 
-        <!-- Side panel moved outside the hero so it becomes the right column in .card.with-panel -->
-        <aside class="panel" aria-label="about-heading">
-            <div style="position:relative">
-                <h3 id="about-heading">About Us</h3>
-                <p class="small">We are dedicated to providing cutting-edge solutions for network security, leveraging advanced technologies to protect your digital assets.</p>
-
-                <textarea id="about-input" placeholder="Describe N.I.A.D"></textarea>
+        <section class="features" aria-label="Key features">
+            <h3>Key Features</h3>
+            <div class="features-grid">
+                <article class="feature-card sw-card">
+                    <h4>Real-time Anomaly Detection</h4>
+                    <p>Continuously analyze traffic patterns and flag deviations using adaptive models.</p>
+                </article>
+                <article class="feature-card sw-card">
+                    <h4>Intrusion Response</h4>
+                    <p>Automate containment and alerts with rule-based and ML-driven responders.</p>
+                </article>
+                <article class="feature-card sw-card">
+                    <h4>Rich Reporting</h4>
+                    <p>Detailed audit trails, exportable reports, and interactive timelines for investigations.</p>
+                </article>
             </div>
-        </aside>
+        </section>
+
+        <section class="how-it-works">
+            <h3>How it works</h3>
+            <ol>
+                <li>Ingest network telemetry and flow data.</li>
+                <li>Normalize and score behaviors in real-time.</li>
+                <li>Trigger automated responses and generate reports.</li>
+            </ol>
+        </section>
+
+        <footer class="site-footer small">
+            <div>© N.I.A.D — Built for secure networks</div>
+        </footer>
     </main>
 
     <script src="js/stars.js"></script>

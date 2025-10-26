@@ -6,13 +6,18 @@ import os
 # Get the absolute path to the backend directory
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+MODEL = None
+SCALER = None
+ENCODERS = None
+
 def load_models(features_path=os.path.join(BACKEND_DIR, "model", "X_scaled.pkl"),
                labels_path=os.path.join(BACKEND_DIR, "model", "y.pkl"),
                scaler_path=os.path.join(BACKEND_DIR, "model", "scaler.pkl"),
                encoders_path=os.path.join(BACKEND_DIR, "model", "categorical_encoders.pkl"),
                model_path=os.path.join(BACKEND_DIR, "model", "random_forest.pkl")):
     """
-    Load all necessary models and preprocessors
+    Load all necessary models and preprocessors. This function returns newly loaded
+    components; callers in this module will cache them in module-level globals.
     """
     try:
         scaler = joblib.load(scaler_path)
@@ -21,6 +26,15 @@ def load_models(features_path=os.path.join(BACKEND_DIR, "model", "X_scaled.pkl")
         return model, scaler, encoders
     except Exception as e:
         raise Exception(f"Error loading models: {str(e)}")
+
+def ensure_models_loaded():
+    """Ensure module-level MODEL/SCALER/ENCODERS are loaded and cached.
+    Calling this repeatedly is inexpensive after first load.
+    """
+    global MODEL, SCALER, ENCODERS
+    if MODEL is None or SCALER is None or ENCODERS is None:
+        MODEL, SCALER, ENCODERS = load_models()
+    return MODEL, SCALER, ENCODERS
 
 def preprocess_input(data, scaler, encoders):
     """
@@ -66,9 +80,9 @@ def predict(data):
         dict: Prediction results including class and confidence
     """
     try:
-        # Load models
-        model, scaler, encoders = load_models()
-        
+        # Load models (cached)
+        model, scaler, encoders = ensure_models_loaded()
+
         # Preprocess input
         X = preprocess_input(data, scaler, encoders)
         

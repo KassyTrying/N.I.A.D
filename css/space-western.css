@@ -1,0 +1,184 @@
+/* Space-Western theme for cards and UI components
+   Reusable, lightweight styles to evoke a western + space aesthetic.
+   Apply by adding the `sw-theme` class to a container (e.g. <main class="sw-theme">)
+   and add utility class `sw-card` to card-like elements where needed.
+*/
+
+:root{
+  --sw-bg-1: #03040a; /* deeper space */
+  --sw-bg-2: #071229; /* midnight */
+  --sw-accent: #ffd77f; /* warmer sand */
+  --sw-accent-2: #7ff3ff; /* brighter neon star */
+  --sw-card-bg: rgba(8,10,18,0.78);
+  --sw-card-border: linear-gradient(120deg, rgba(255,215,130,0.16), rgba(127,240,255,0.08));
+  --sw-glow: 0 8px 30px rgba(127,240,255,0.08), 0 3px 10px rgba(255,215,130,0.06);
+  --sw-radius: 14px;
+  --sw-font-sans: 'Montserrat', "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --sw-font-western: 'Cinzel', Georgia, 'Times New Roman', serif;
+}
+
+/* Theme container: scope styles so we don't break other pages */
+.sw-theme body, .sw-theme .stars{ /* support existing stars background */
+  background: radial-gradient(ellipse at 10% 10%, rgba(101,240,255,0.02), transparent 6%),
+              radial-gradient(ellipse at 90% 80%, rgba(255,210,127,0.02), transparent 6%),
+              linear-gradient(180deg,var(--sw-bg-1), var(--sw-bg-2));
+  color: #e6eef8;
+}
+
+.sw-theme main.card, .sw-theme .sw-card {
+  background: var(--sw-card-bg);
+  border-radius: var(--sw-radius);
+  padding: 1.25rem;
+  box-shadow: var(--sw-glow);
+  border: 1px solid rgba(255,255,255,0.03);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+/* gentle neon border accent */
+.sw-theme main.card::before, .sw-theme .sw-card::before{
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  background: var(--sw-card-border);
+  filter: blur(8px);
+  opacity: .55;
+  mix-blend-mode: screen;
+}
+
+/* Title / hero */
+.sw-theme .hero h1{
+  font-family: var(--sw-font-western);
+  font-size: 2.4rem;
+  margin: 0 0 .6rem 0;
+  color: var(--sw-accent);
+  text-shadow: 0 2px 0 rgba(0,0,0,0.45), 0 8px 22px rgba(127,240,255,0.06);
+  letter-spacing: 1.2px; /* increased spacing for western title */
+  line-height: 1.02;
+}
+.sw-theme .hero h2{
+  font-family: var(--sw-font-sans);
+  font-weight:600;
+  font-size:1.05rem;
+  margin:0 0 .6rem 0;
+  color: #d8e9f7;
+  letter-spacing: .6px;
+}
+
+.sw-theme .hero .lead{
+  color: #cfe7ff;
+  opacity: .95;
+  font-family: var(--sw-font-sans);
+  line-height: 1.6; /* more vertical rhythm for paragraphs */
+  margin-bottom: 1rem;
+  letter-spacing: 0.25px;
+  font-size: 1rem;
+}
+
+/* Actions: western buttons with neon outline */
+.sw-theme .btn{
+  /* Make buttons warmer (sand) by default */
+  background: linear-gradient(180deg, rgba(255,215,130,0.16), rgba(255,215,130,0.06));
+  color: #111827; /* dark text for legibility on warm background */
+  border: 1px solid rgba(255,215,130,0.16);
+  padding: .5rem .9rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(255,215,130,0.06);
+}
+.sw-theme .btn.btn-primary{
+  /* Primary buttons emphasize the sand accent */
+  background: linear-gradient(90deg, var(--sw-accent) 0%, #ffd27f 60%);
+  color: #041225; /* deep text for contrast */
+  border: 1px solid rgba(255,215,130,0.22);
+  box-shadow: 0 8px 28px rgba(255,215,130,0.08);
+}
+
+/* Optional secondary/neon style when you want cyan accent */
+.sw-theme .btn.btn-neon{
+  background: linear-gradient(90deg, rgba(127,240,255,0.12), var(--sw-accent-2));
+  color: #042d3a;
+  border: 1px solid rgba(127,240,255,0.18);
+}
+
+/* Data source buttons (card-like tokens) */
+.sw-theme .dnd-sources{
+  display:flex; gap:.6rem; flex-wrap:wrap; margin:1rem 0;
+}
+.sw-theme .source{
+  display:flex; align-items:center; gap:.6rem; padding:.6rem .9rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  border-radius: 12px; border: 1px solid rgba(255,255,255,0.03);
+  cursor:grab; color: #fff; min-width:160px;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.sw-theme .source:active{ cursor:grabbing }
+.sw-theme .source:hover{ transform:translateY(-4px); box-shadow: 0 10px 30px rgba(5,8,20,0.6); }
+.sw-theme .source .icon{ font-size:1.25rem; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
+.sw-theme .source .label{ font-weight:700; color:var(--sw-accent-2); }
+.sw-theme .source .file-name{ font-size:.75rem; color: #cbdff0; opacity:.85 }
+
+/* Dropzone */
+.sw-theme .dropzone{
+  border-radius: 14px; padding: 1.2rem; margin-top: .5rem;
+  border: 2px dashed rgba(101,240,255,0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03));
+  transition: box-shadow .12s ease, border-color .12s ease;
+}
+.sw-theme .dropzone:focus-within, .sw-theme .dropzone.dragover{
+  border-color: rgba(101,240,255,0.28);
+  box-shadow: 0 8px 30px rgba(101,240,255,0.06);
+}
+.sw-theme .dz-cta{ color: #dff9ff; text-align:center; font-weight:600 }
+
+/* Modal / result card */
+.sw-theme .modal-content{
+  background: linear-gradient(180deg, rgba(10,12,20,0.88), rgba(8,10,18,0.7));
+  border-radius: 12px; padding: 1rem; width: min(720px, 92vw);
+  border: 1px solid rgba(101,240,255,0.06);
+}
+.sw-theme .result-title{ color: var(--sw-accent-2); margin: .3rem 0 }
+.sw-theme .result-message{ color: #d7eaf7 }
+
+/* little decorative 'wanted' style badge to add western vibe */
+.sw-theme .wanted-badge{
+  display:inline-block; padding:.25rem .5rem; border-radius:8px; font-weight:700;
+  background: linear-gradient(90deg, rgba(255,210,127,0.12), rgba(255,210,127,0.06));
+  color: var(--sw-accent);
+  border: 1px solid rgba(255,210,127,0.08);
+}
+
+/* small responsive tweaks */
+@media (max-width:720px){
+  .sw-theme .hero h1{ font-size:1.6rem }
+  .sw-theme .dnd-sources{ gap:.45rem }
+}
+
+/* Product landing adjustments */
+.sw-theme .product-hero .hero-inner{ display:flex; gap:2rem; align-items:center; justify-content:space-between }
+.sw-theme .product-hero .hero-copy{ flex:1; min-width:260px }
+.sw-theme .hero-copy .action{ display:flex; gap:14px; justify-content:center; margin-top:1rem }
+.sw-theme .product-hero .hero-visual{ width:320px; max-width:40%; }
+.sw-theme .mini-monitor{ padding:12px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06)); border:1px solid rgba(255,255,255,0.04) }
+.sw-theme .features{ margin-top:1.25rem }
+.sw-theme .features h3{ margin-bottom:.6rem; color:#e9f6ff }
+.sw-theme .features-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem }
+.sw-theme .feature-card{ padding:1rem; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03)); border:1px solid rgba(255,255,255,0.03);}
+.sw-theme .feature-card h4{ margin:0 0 .6rem 0; color:var(--sw-accent) }
+.sw-theme .how-it-works{ margin-top:1rem; padding-top:1rem; border-top:1px dashed rgba(255,255,255,0.04) }
+.sw-theme .how-it-works ol{ margin-left:1.25rem }
+.sw-theme .site-footer{ margin-top:1.25rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.02); text-align:center }
+
+@media (max-width:920px){
+  .sw-theme .product-hero .hero-inner{ flex-direction:column }
+  .sw-theme .features-grid{ grid-template-columns:1fr }
+  .sw-theme .product-hero .hero-visual{ width:100%; max-width:100% }
+}
+
+/* Utility to apply theme to any single card element */
+.sw-card{ display:block }
+
+/* End of space-western.css */
