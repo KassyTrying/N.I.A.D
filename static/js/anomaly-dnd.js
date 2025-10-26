@@ -47,6 +47,7 @@ function handleDrop(e) {
     this.classList.remove('dragover');
     
     const fileName = e.dataTransfer.getData('text/plain');
+    console.log('Dropped file:', e);
     if (fileName) {
         processFile(fileName);
     }
@@ -74,6 +75,7 @@ async function processFile(fileName) {
         console.log(data);
         if (response.ok) {
             // Show results
+             console.log(data);
             updateProgress('Analysis complete', 100);
             setTimeout(() => {
                 showResults(data, fileName);
@@ -82,6 +84,7 @@ async function processFile(fileName) {
         } else {
             throw new Error(data.error || 'Failed to process file');
         }
+         console.log(data);
     } catch (error) {
         console.error('Error:', error);
         updateProgress('Error: ' + error.message, 0);
@@ -141,26 +144,33 @@ function updateProgress(message, percent) {
     statusText.textContent = message;
 }
 
+
 function showResults(data, fileName) {
     scanStatus.hidden = true;
+    console.log('Test');
     
     const modal = document.getElementById('resultModal');
     const resultIcon = modal.querySelector('.result-icon');
+    console.log('Test');
     const resultTitle = modal.querySelector('.result-title');
     const resultMessage = modal.querySelector('.result-message');
     const resultDetails = modal.querySelector('.result-details');
+    console.log('Test');
     
     // Set content based on result
     if (data.anomalyFound) {
         resultIcon.innerHTML = '⚠️';
+        console.log('Test');
         resultTitle.innerHTML = 'Anomaly Detected!';
         resultTitle.style.color = '#dc3545';
         resultMessage.innerHTML = 'Potential network intrusion detected in the analyzed traffic.';
     } else {
         resultIcon.innerHTML = '✅';
         resultTitle.innerHTML = 'No Anomaly Found';
+        console.log('Test');
         resultTitle.style.color = '#28a745';
         resultMessage.innerHTML = 'The analyzed traffic appears to be normal.';
+        
     }
 
     // Helper to extract detection and confidence from different response shapes
@@ -198,7 +208,7 @@ function showResults(data, fileName) {
     }
 
     // Add detailed information
-    let detailsHtml = `\n        <p><strong>File Analyzed:</strong> ${fileName}</p>\n        <p><strong>Analysis Status:</strong> ${data.status}</p>\n    `;    
+    let detailsHtml = `\n        <p><strong>File Analyzed:</strong> ${fileName}</p>\n        <p><strong>Analysis Status:</strong> ${data.status}</p>\n    `;
     resultDetails.innerHTML = detailsHtml;
     // Add download link for results.txt (if available on the server)
     const downloadWrapper = document.createElement('div');
