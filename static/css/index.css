@@ -73,7 +73,7 @@
 
 .prompt-bar {
     display: flex;
-    flex-wrap: nowrap; /* keep prompts on one line */
+    flex-wrap: nowrap; /* keep prompts on a single row */
     gap: 12px;
     position: absolute;
     left: 50%;
@@ -83,16 +83,19 @@
     max-width: 92%;
     z-index: 6;
     transition: opacity 180ms ease, transform 180ms ease;
+    overflow-x: auto; /* allow horizontal scrolling when there are many/long prompts */
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 10px; /* breathing room so scroll works comfortably */
 }
 .prompt-bar.hidden{opacity:0;pointer-events:none;transform: translateX(-50%) translateY(10px)}
-.prompt-bar .prompt-btn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prompt-bar .prompt-btn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:320px}
 .prompt-btn {
     background: transparent;
     color: #cbd5ff;
     border: 1px solid rgba(124,58,36,0.16);
     border-radius: 20px;
-    padding: 8px 12px;
-    font-size: 14px;
+    padding: 10px 16px; /* larger tappable area */
+    font-size: 15px; /* slightly larger text so prompts are readable */
     font-weight: 600;
     cursor: pointer;
     transition: background 0.12s, transform 0.08s;
