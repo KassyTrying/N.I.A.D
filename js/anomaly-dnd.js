@@ -298,10 +298,10 @@ function showResults(data, fileName) {
     // Add detailed information
     let detailsHtml = `\n        <p><strong>File Analyzed:</strong> ${fileName}</p>\n        <p><strong>Analysis Status:</strong> ${data.status}</p>\n    `;
     if (info && (info.prediction || info.confidence || info.is_attack !== null)) {
-        // detailsHtml += `\n            <p><strong>Detection Type:</strong> ${friendlyPrediction(info.prediction)}</p>\n            <p><strong>Confidence:</strong> ${formatConfidence(info.confidence)}</p>\n        `;
+        detailsHtml += `\n            <p><strong>Detection Type:</strong> ${friendlyPrediction(info.prediction)}</p>\n            <p><strong>Confidence:</strong> ${formatConfidence(info.confidence)}</p>\n        `;
     } else {
         // Provide guidance when no detection info available
-        // detailsHtml += `\n            <p><em>No per-record detection or confidence available for this file.</em></p>\n            <p>If you expect detection and confidence, submit a JSON feature payload or enable dataset parsing on the server.</p>\n        `;
+        detailsHtml += `\n            <p><em>No per-record detection or confidence available for this file.</em></p>\n            <p>If you expect detection and confidence, submit a JSON feature payload or enable dataset parsing on the server.</p>\n        `;
     }
     resultDetails.innerHTML = detailsHtml;
     // Add download link for results.txt (if available on the server)
